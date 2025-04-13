@@ -24,6 +24,7 @@ public class BookslistService {
                 .map(books -> new BookslistDto(
                         books.getId(),
                         books.getBookName(),
+                        books.getPrice(),
                         books.getBookCoverImagePath()
                         ))
                 .toList();
@@ -57,15 +58,20 @@ public class BookslistService {
     }
 
     public Bookslist updateBook(Bookslist book, Integer id) {
+        Optional<Bookslist> bookToUpdate = bookslistRepository.findById(id);
         try {
-            Optional<Bookslist> bookToUpdate = bookslistRepository.findById(id);
             if (bookToUpdate.isPresent()) {
+                bookToUpdate.get().setBookName(book.getBookName());
+                bookToUpdate.get().setAuthor(book.getAuthor());
+                bookToUpdate.get().setPrice(book.getPrice());
+                bookToUpdate.get().setCategory(book.getCategory());
+                bookToUpdate.get().setPublishedDate(book.getPublishedDate());
+                bookToUpdate.get().setBookCoverImagePath(book.getBookCoverImagePath());
                 return bookslistRepository.save(bookToUpdate.get());
-            } else {
-                throw new RuntimeException("Book not found");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("Error updating book!");
         }
         return null;
     }
