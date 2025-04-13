@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Table(name = "users")
 @AllArgsConstructor
-public class UserDetails {
+public class UserInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class UserDetails {
     @Column(name = "email")
     private String email;
 
-    public UserDetails(){}
+    public UserInfo(){}
 
     public Integer getId() {
         return id;

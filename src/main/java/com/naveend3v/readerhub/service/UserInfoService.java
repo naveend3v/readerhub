@@ -1,8 +1,8 @@
 package com.naveend3v.readerhub.service;
 
 import com.naveend3v.readerhub.dto.userdetails.UserDetailsDto;
-import com.naveend3v.readerhub.model.UserDetails;
-import com.naveend3v.readerhub.repository.UserDetailsRepository;
+import com.naveend3v.readerhub.model.UserInfo;
+import com.naveend3v.readerhub.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserDetailsService {
+public class UserInfoService {
     @Autowired
-    private UserDetailsRepository userDetailsRepository;
+    private UserInfoRepository userInfoRepository;
 
-    public UserDetailsService(UserDetailsRepository userDetailsRepository) {
-        this.userDetailsRepository = userDetailsRepository;
+    public UserInfoService(UserInfoRepository userInfoRepository) {
+        this.userInfoRepository = userInfoRepository;
     }
 
     public List<UserDetailsDto> getAllUsers() {
-        List<UserDetailsDto> getAllUsers =  userDetailsRepository.findAll()
+        List<UserDetailsDto> getAllUsers =  userInfoRepository.findAll()
                 .stream()
                 .map(user -> new UserDetailsDto(
                         user.getId(),
@@ -31,13 +31,13 @@ public class UserDetailsService {
         return getAllUsers;
     }
 
-    public Optional<UserDetailsDto> findByName(String username) {
-        return userDetailsRepository.findByName(username);
+    public Optional<UserInfo> findByName(String username) {
+        return userInfoRepository.findByName(username);
     }
 
-    public String saveUser(UserDetails userDetails) {
-        String newUsername = userDetails.getName();
-        String updatedUsername = userDetailsRepository.save(userDetails).getName();
+    public String saveUser(UserInfo userInfo) {
+        String newUsername = userInfo.getName();
+        String updatedUsername = userInfoRepository.save(userInfo).getName();
         try{
         if(newUsername.equals(updatedUsername)){
             return "User updated successfully";
@@ -50,7 +50,7 @@ public class UserDetailsService {
 
     public Optional<UserDetailsDto> findById(Integer userId) {
         try {
-            Optional<UserDetailsDto> getUser = userDetailsRepository.findById(userId)
+            Optional<UserDetailsDto> getUser = userInfoRepository.findById(userId)
                     .stream()
                     .map((user) -> new UserDetailsDto(
                             user.getId(),
