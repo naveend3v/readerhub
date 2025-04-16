@@ -1,21 +1,21 @@
-DROP TABLE IF EXISTS cart;
-DROP TABLE IF EXISTS order_items;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS bookslist;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS readerhub.cart;
+DROP TABLE IF EXISTS readerhub.order_items;
+DROP TABLE IF EXISTS readerhub.orders;
+DROP TABLE IF EXISTS readerhub.bookslist;
+DROP TABLE IF EXISTS readerhub.users;
 
 -- Users table first, as it's referenced by others
-CREATE TABLE users (
+CREATE TABLE readerhub.users (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) DEFAULT NULL,
   password VARCHAR(255) DEFAULT NULL,
   roles VARCHAR(255) DEFAULT NULL,
   email VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 -- Books list
-CREATE TABLE bookslist (
+CREATE TABLE readerhub.bookslist (
   id INT NOT NULL AUTO_INCREMENT,
   book_name VARCHAR(255) DEFAULT NULL,
   author VARCHAR(255) DEFAULT NULL,
@@ -25,10 +25,10 @@ CREATE TABLE bookslist (
   category VARCHAR(255) DEFAULT NULL,
   image_path VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- Orders table
-CREATE TABLE orders (
+CREATE TABLE readerhub.orders (
   id INT NOT NULL AUTO_INCREMENT,
   created_date DATE DEFAULT NULL,
   session_id VARCHAR(255) DEFAULT NULL,
@@ -37,10 +37,10 @@ CREATE TABLE orders (
   PRIMARY KEY (id),
   KEY FK_orders_user (user_id),
   CONSTRAINT FK_orders_user FOREIGN KEY (user_id) REFERENCES users (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 -- Order Items
-CREATE TABLE order_items (
+CREATE TABLE readerhub.order_items (
   order_item_id INT NOT NULL AUTO_INCREMENT,
   book_id INT DEFAULT NULL,
   created_date DATE DEFAULT NULL,
@@ -52,10 +52,10 @@ CREATE TABLE order_items (
   PRIMARY KEY (order_item_id),
   KEY FK_order_items_order (order_id),
   CONSTRAINT FK_order_items_order FOREIGN KEY (order_id) REFERENCES orders (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 -- Cart
-CREATE TABLE cart (
+CREATE TABLE readerhub.cart (
   id INT NOT NULL AUTO_INCREMENT,
   book_id INT DEFAULT NULL,
   user_id INT DEFAULT NULL,
@@ -65,4 +65,4 @@ CREATE TABLE cart (
   KEY FK_cart_user (user_id),
   CONSTRAINT FK_cart_book FOREIGN KEY (book_id) REFERENCES bookslist (id),
   CONSTRAINT FK_cart_user FOREIGN KEY (user_id) REFERENCES users (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
