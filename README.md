@@ -37,10 +37,16 @@ Readerhub is an online book store, where user can buy books. The owner of the st
    - `AWS_S3_BUCKET_NAME` --> Set your AWS S3 bucket name
    - `STRIPE_SECRET_KEY` -->  Set your Stripe account secret key
 
-3. In IDE, run `maven clean install` command to create `.jar` file
+3. In IDE, run `maven clean install` command to create `.jar` file or use IDE to generate `.jar` file.
+   ![ide](./images/ide1.png)
 
 4. Running via docker: 
    - Open terminal in project root folder
    - Execute command: `docker-compose up`
+     ![command](./images/docker_compose.png)
    - Wait for few minutes, docker pull the required images, build and spin the MySQL and SpringBoot containers
-   
+   ![tomcat server up](./images/tomat_server_up.png)
+   - Check the docker containers are up and running using commands `docker images` and `docker ps`
+     ![docker images](./images/docker_containers.png)
+   - Then you can check the connection with the curl command in host terminal / post man.
+   ![curl command](./images/curl.png)
