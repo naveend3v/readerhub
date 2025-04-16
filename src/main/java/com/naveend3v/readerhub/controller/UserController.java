@@ -88,26 +88,31 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity authenticateAndGetToken(@RequestBody JwtAuthRequest jwtAuthRequest){
-        if (jwtAuthRequest.getUsername() == null || jwtAuthRequest.getUsername().length() <= 0 || jwtAuthRequest.getPassword() == null || jwtAuthRequest.getPassword().length() <= 0) {
+    public ResponseEntity authenticateAndGetToken(@RequestBody JwtAuthRequest jwtAuthRequest) {
+        if (jwtAuthRequest.getUsername() == null || jwtAuthRequest.getUsername().isEmpty() ||
+                jwtAuthRequest.getPassword() == null || jwtAuthRequest.getPassword().isEmpty()) {
             return ErrorResponse.generateResp("Username or password cannot be empty!", HttpStatus.BAD_REQUEST);
         }
 
         Optional<UserInfo> user = userInfoService.findByName(jwtAuthRequest.getUsername());
 
-        if(user.isEmpty()){
-            return ErrorResponse.generateResp("Invalid username or password", HttpStatus.NOT_FOUND);
+        if (user.isEmpty()) {
+            return ErrorResponse.generateResp("Invalid username or password!", HttpStatus.NOT_FOUND);
         }
 
-        if(user.isPresent() && user.get().getRoles().contains("ROLE_USER")){
-            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(jwtAuthRequest.getUsername(), jwtAuthRequest.getPassword()));
-            if (auth.isAuthenticated()) {
-                return AuthResponse.generateResp(jwtService.generateToken(jwtAuthRequest.getUsername()),HttpStatus.OK);
+        if (user.isPresent() && user.get().getRoles().contains("ROLE_USER")) {
+            try {
+                Authentication auth = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(jwtAuthRequest.getUsername(), jwtAuthRequest.getPassword())
+                );
+                if (auth.isAuthenticated()) {
+                    return AuthResponse.generateResp(jwtService.generateToken(jwtAuthRequest.getUsername()), HttpStatus.OK);
+                }
+            } catch (Exception e) {
+                return ErrorResponse.generateResp("Invalid username or password!", HttpStatus.UNAUTHORIZED);
             }
-        } else {
-            return ErrorResponse.generateResp("User is not an Admin!", HttpStatus.UNAUTHORIZED);
         }
-        return ErrorResponse.generateResp("Invalid username or password", HttpStatus.UNAUTHORIZED);
+        return ErrorResponse.generateResp("Invalid username or password!", HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/books")
